@@ -1,0 +1,30 @@
+{
+  "name": "aerotouch",
+  "version": "1.0.0",
+  "description": "100% Offline AI Hand Gesture Controller for Web Browsers",
+  "main": "src/background/background.js",
+  "scripts": {
+    "start": "node scripts/server.js",
+    "test": "node src/test/test_runner.js",
+    "check": "node -c src/background/background.js src/content/content_script.js src/core/config.js src/core/gestures.js src/core/gesture_detector.js lib/smooth_filter.js src/sidepanel/sidepanel.js src/popup/popup.js src/options/options.js",
+    "verify": "node scripts/verify_html_links.js",
+    "build:icons": "node scripts/generate_icons.js",
+    "build:zip": "node scripts/package_extension.js"
+  },
+  "keywords": [
+    "gesture-control",
+    "mediapipe",
+    "offline-ai",
+    "chrome-extension",
+    "webextension",
+    "hands-free",
+    "computer-vision",
+    "one-euro-filter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/hands": "^0.4.1675469240"
+  }
+}

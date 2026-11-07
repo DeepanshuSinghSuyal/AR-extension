@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroTouch - Standalone Offline Gesture Diagnostic Playground</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #121927;
+      --border: rgba(0, 240, 255, 0.2);
+      --cyan: #00f0ff;
+      --purple: #a855f7;
+      --green: #10b981;
+      --text: #f0f6fc;
+      --text-muted: #8b949e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px;
+      line-height: 1.5;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(168, 85, 247, 0.3));
+      border: 1px solid var(--cyan);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .brand h1 {
+      font-size: 22px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    video { display: none; }
+    canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .telemetry-row {
+      display: flex;
+      gap: 10px;
+    }
+    .tele-item {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+    }
+    .tele-label { color: var(--text-muted); display: block; font-size: 10px; }
+    .tele-val { color: var(--cyan); font-weight: 700; font-family: monospace; font-size: 14px; }
+
+    .gesture-banner {
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .gesture-avatar {
+      font-size: 36px;
+      width: 56px;
+      height: 56px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--cyan);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gesture-details h3 {
+      font-size: 18px;
+      color: var(--text);
+    }
+    .action-tag {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid var(--purple);
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #00d2ff, #0088ff);
+      color: white;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .targets-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .interactive-row {
+      display: flex;
+      gap: 8px;
+    }
+    .target-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--cyan);
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+    .target-btn:hover {
+      background: rgba(0, 240, 255, 0.25);
+    }
+
+    .scroll-target {
+      height: 120px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 12px;
+      overflow-y: auto;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .log-box {
+      height: 120px;
+      background: #050811;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 3px;
+    }
+    .log-msg { color: var(--cyan); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon">🖐️</div>
+      <div>
+        <h1>AeroTouch Diagnostic Studio</h1>
+        <p style="color: var(--text-muted); font-size: 12px;">Standalone Offline Testing & Calibration Environment</p>
+      </div>
+    </div>
+    <span class="badge">100% Offline AI Loaded</span>
+  </div>
+
+  <div class="main-grid">
+    <!-- Camera Tracking & Vision Viewport -->
+    <div class="card">
+      <h2>Camera & Landmark Tracker</h2>
+      <div class="video-container">
+        <video id="webcam" playsinline muted autoplay></video>
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button id="btn-start" class="btn btn-primary" style="flex: 1;">Start Tracking</button>
+        <button id="btn-stop" class="btn btn-secondary">Stop</button>
+      </div>
+
+      <!-- Telemetry -->
+      <div class="telemetry-row">
+        <div class="tele-item">
+          <span class="tele-label">FPS</span>
+          <span id="fps-val" class="tele-val">0</span>
+        </div>
+        <div class="tele-item">
+          <span class="tele-label">Handedness</span>
+          <span id="hand-val" class="tele-val">None</span>
+        </div>
+        <div class="tele-item">
+          <span class="tele-label">Confidence</span>
+          <span id="conf-val" class="tele-val">0%</span>
+        </div>
+        <div class="tele-item">
+          <span class="tele-label">Pinch Distance</span>
+          <span id="pinch-dist" class="tele-val">0.00</span>
+        </div>
+      </div>
+
+      <!-- Detected Gesture Banner -->
+      <div class="gesture-banner">
+        <div id="gesture-icon" class="gesture-avatar">✋</div>
+        <div class="gesture-details">
+          <h3 id="gesture-name">Waiting for Camera...</h3>
+          <span id="action-badge" class="action-tag">ACTION_NONE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Testing Sandbox -->
+    <div class="card">
+      <h2>Interactive Gesture Targets</h2>
+      <p style="color: var(--text-muted); font-size: 12px;">Move your hand over these elements and perform gestures to test actions:</p>
+
+      <div class="targets-section">
+        <div class="interactive-row">
+          <button id="test-click" class="target-btn">Click Target (Pinch)</button>
+          <button id="test-dbl" class="target-btn" style="color: var(--purple); border-color: rgba(168, 85, 247, 0.3);">Double Click (2x Pinch)</button>
+          <button id="test-right" class="target-btn" style="color: var(--green); border-color: rgba(16, 185, 129, 0.3);">Right Click (Mid Pinch)</button>
+        </div>
+
+        <input type="text" placeholder="Pinch here to focus and test typing..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); color: white;">
+
+        <div class="scroll-target" id="scroll-box">
+          <p><strong>Scroll Test Box:</strong> Make the Peace / Victory sign (✌️) and tilt or move hand vertically:</p>
+          <p>• AeroTouch operates completely offline</p>
+          <p>• Uses local MediaPipe WASM binaries</p>
+          <p>• Zero telemetry, zero cloud data transfer</p>
+          <p>• Stabilized with the One-Euro Jitter Filter</p>
+          <p>• Dynamic velocity smooth scrolling</p>
+          <p>• Cross-browser compatible (Chrome, Edge, Brave, Firefox)</p>
+          <p>• Deep shadow DOM cursor integration</p>
+          <p>• End of scroll container</p>
+        </div>
+
+        <div id="drag-box" style="padding: 14px; text-align: center; border: 2px dashed var(--cyan); border-radius: 8px; cursor: grab; background: rgba(0, 240, 255, 0.05);">
+          ✋ Pinch & Hold to Drag Me Around
+        </div>
+      </div>
+
+      <div class="log-box" id="log-box">
+        <div class="log-msg">[System] Playground ready. Click "Start Tracking" to begin.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline MediaPipe Scripts -->
+  <script src="../../lib/mediapipe/camera_utils.js"></script>
+  <script src="../../lib/mediapipe/hands.js"></script>
+  <script src="../../lib/smooth_filter.js"></script>
+  <script src="../core/config.js"></script>
+  <script src="../core/gestures.js"></script>
+  <script src="../core/gesture_detector.js"></script>
+
+  <script>
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const btnStart = document.getElementById('btn-start');
+    const btnStop = document.getElementById('btn-stop');
+    const fpsVal = document.getElementById('fps-val');
+    const handVal = document.getElementById('hand-val');
+    const confVal = document.getElementById('conf-val');
+    const pinchDist = document.getElementById('pinch-dist');
+    const gestureIcon = document.getElementById('gesture-icon');
+    const gestureName = document.getElementById('gesture-name');
+    const actionBadge = document.getElementById('action-badge');
+    const logBox = document.getElementById('log-box');
+
+    let hands = null;
+    let stream = null;
+    let isRunning = false;
+    let detector = null;
+    let frameCount = 0;
+    let lastFps = performance.now();
+
+    function log(msg) {
+      const el = document.createElement('div');
+      el.className = 'log-msg';
+      const time = new Date().toLocaleTimeString().split(' ')[0];
+      el.textContent = `[${time}] ${msg}`;
+      logBox.prepend(el);
+    }
+
+    if (typeof GestureDetector !== 'undefined') {
+      detector = new GestureDetector();
+    }
+
+    async function getRobustUserMedia() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        if (window.location.protocol === 'file:') {
+          throw new Error('Chrome and Edge block webcam access on file:// URLs for security. Please open http://127.0.0.1:8080/src/test/gesture_test.html in your browser, or use the extension popup.');
+        }
+        throw new Error('navigator.mediaDevices.getUserMedia is not available in this browser.');
+      }
+
+      // Pure { video: true } triggers the browser native permission prompt directly
+      try {
+        return await navigator.mediaDevices.getUserMedia({ video: true });
+      } catch (err) {
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          throw new Error('Camera permission was denied. Click the camera / lock icon in your address bar (top left) and choose "Always allow", then reload.');
+        }
+        if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          throw new Error('Camera is in use by another application (Zoom, Teams, Discord, Skype, OBS, or Windows Camera) or hardware shutter is closed.');
+        }
+        if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+          throw new Error('No webcam detected by Windows. Check if your laptop camera has a physical privacy slider (shutter) or Fn camera key (e.g. Fn+F6/F8/F10).');
+        }
+        throw err;
+      }
+    }
+
+    if (window.location.protocol === 'file:') {
+      log('⚠️ Notice: Browser blocks webcam on file:// URLs. Run "npm start" or test via Extension Sidepanel.');
+    }
+
+    btnStart.addEventListener('click', async () => {
+      try {
+        btnStart.textContent = 'Loading MediaPipe...';
+        btnStart.disabled = true;
+
+        if (!hands) {
+          hands = new Hands({
+            locateFile: (file) => `../../lib/mediapipe/${file}`
+          });
+          hands.setOptions({
+            maxNumHands: 1,
+            modelComplexity: 1,
+            minDetectionConfidence: 0.65,
+            minTrackingConfidence: 0.65
+          });
+          hands.onResults(onResults);
+        }
+
+        stream = await getRobustUserMedia();
+        video.srcObject = stream;
+        await new Promise(r => video.onloadedmetadata = () => { video.play(); r(); });
+
+        isRunning = true;
+        btnStart.textContent = 'Running';
+        log('Webcam connected. Offline MediaPipe initialized.');
+        requestAnimationFrame(renderLoop);
+      } catch (err) {
+        log(`❌ ${err.message}`);
+        alert('Webcam Error: ' + err.message);
+        btnStart.textContent = 'Start Tracking';
+        btnStart.disabled = false;
+      }
+    });
+
+    btnStop.addEventListener('click', () => {
+      isRunning = false;
+      if (stream) stream.getTracks().forEach(t => t.stop());
+      video.srcObject = null;
+      btnStart.textContent = 'Start Tracking';
+      btnStart.disabled = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      log('Tracking stopped.');
+    });
+
+    async function renderLoop() {
+      if (!isRunning) return;
+      if (video.readyState >= 2 && hands) {
+        await hands.send({ image: video });
+      }
+      requestAnimationFrame(renderLoop);
+    }
+
+    const CONNECTIONS = [
+      [0,1],[1,2],[2,3],[3,4],
+      [0,5],[5,6],[6,7],[7,8],
+      [5,9],[9,10],[10,11],[11,12],
+      [9,13],[13,14],[14,15],[15,16],
+      [13,17],[17,18],[18,19],[19,20],[0,17]
+    ];
+
+    function onResults(results) {
+      if (canvas.width !== video.videoWidth) {
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+      }
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Draw mirrored video
+      ctx.save();
+      ctx.translate(w, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(results.image, 0, 0, w, h);
+      ctx.restore();
+
+      if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+        const lm = results.multiHandLandmarks[0];
+        const handedness = results.multiHandedness && results.multiHandedness[0] ? results.multiHandedness[0].label : 'Right';
+        const conf = results.multiHandedness && results.multiHandedness[0] ? Math.round(results.multiHandedness[0].score * 100) : 95;
+
+        handVal.textContent = handedness;
+        confVal.textContent = `${conf}%`;
+
+        // Draw skeleton
+        ctx.save();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#00f0ff';
+        ctx.shadowColor = '#00f0ff';
+        ctx.shadowBlur = 8;
+        CONNECTIONS.forEach(([i, j]) => {
+          ctx.beginPath();
+          ctx.moveTo(lm[i].x * w, lm[i].y * h);
+          ctx.lineTo(lm[j].x * w, lm[j].y * h);
+          ctx.stroke();
+        });
+
+        lm.forEach((p, idx) => {
+          ctx.beginPath();
+          ctx.arc(p.x * w, p.y * h, [4,8,12,16,20].includes(idx) ? 5 : 3, 0, Math.PI * 2);
+          ctx.fillStyle = [4,8,12,16,20].includes(idx) ? '#ffffff' : '#00f0ff';
+          ctx.fill();
+        });
+        ctx.restore();
+
+        // Detect
+        if (detector) {
+          const packet = detector.detect(lm, { width: window.innerWidth, height: window.innerHeight });
+          if (packet) {
+            gestureName.textContent = packet.gesture;
+            actionBadge.textContent = packet.action;
+            pinchDist.textContent = (packet.pinchDistance || 0).toFixed(3);
+            const g = (typeof GestureCatalog !== 'undefined') ? GestureCatalog.GESTURES[packet.gesture] : null;
+            gestureIcon.textContent = g ? g.icon : '✋';
+          }
+        }
+      } else {
+        handVal.textContent = 'None';
+        confVal.textContent = '0%';
+        gestureName.textContent = 'Searching for hand...';
+        actionBadge.textContent = 'ACTION_NONE';
+      }
+
+      frameCount++;
+      const now = performance.now();
+      if (now - lastFps >= 1000) {
+        fpsVal.textContent = Math.round((frameCount * 1000) / (now - lastFps));
+        frameCount = 0;
+        lastFps = now;
+      }
+    }
+
+    // Target buttons
+    document.getElementById('test-click').addEventListener('click', () => log('🎯 Click target triggered!'));
+    document.getElementById('test-dbl').addEventListener('dblclick', () => log('⚡ Double click target triggered!'));
+    document.getElementById('test-right').addEventListener('contextmenu', (e) => { e.preventDefault(); log('🖱️ Right click target triggered!'); });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroTouch Quick Control</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="logo-box">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 11V6a2 2 0 0 0-4 0v5"/>
+            <path d="M14 10V4a2 2 0 0 0-4 0v7"/>
+            <path d="M10 10.5V6a2 2 0 0 0-4 0v8"/>
+            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="logo-text">AeroTouch</h1>
+          <span class="offline-tag">100% Offline AI</span>
+        </div>
+      </div>
+      <div class="header-status">
+        <span id="popup-status-pill" class="status-pill status-ready">Ready</span>
+      </div>
+    </header>
+
+    <!-- Main Action -->
+    <div class="hero-action">
+      <button id="btn-open-sidepanel" class="btn btn-hero">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="15" y1="3" x2="15" y2="21"></line>
+        </svg>
+        Open Side Panel Camera
+      </button>
+      <button id="btn-open-window" class="btn btn-secondary" style="margin-top: 6px; font-size: 11px;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+        Open in Floating Window
+      </button>
+      <button id="btn-grant-permission" class="btn btn-secondary" style="margin-top: 6px; font-size: 11px; border-color: rgba(0, 240, 255, 0.4); color: #00f0ff;">
+        🔑 Enable Camera Access (One-Time Setup)
+      </button>
+      <p class="hero-sub">Dock beside webpages or run as floating camera window</p>
+    </div>
+
+    <!-- Quick Switches -->
+    <div class="toggles-card">
+      <div class="toggle-item">
+        <div class="toggle-text">
+          <span class="toggle-title">Gesture Control</span>
+          <span class="toggle-desc">Enable hands-free browsing</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="popup-toggle-active" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-text">
+          <span class="toggle-title">Virtual Cursor</span>
+          <span class="toggle-desc">Display glowing cybernetic pointer</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="popup-toggle-cursor" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-text">
+          <span class="toggle-title">Audio Feedback</span>
+          <span class="toggle-desc">Subtle click & scroll sound effects</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="popup-toggle-sound" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Quick Sensitivity -->
+    <div class="sensitivity-card">
+      <div class="sens-header">
+        <span>Pointer Sensitivity</span>
+        <span id="popup-sens-val">1.4x</span>
+      </div>
+      <input type="range" id="popup-sens-slider" min="0.5" max="3.0" step="0.1" value="1.4" class="range-slider">
+    </div>
+
+    <!-- Footer Links -->
+    <footer class="popup-footer">
+      <button id="btn-popup-options" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Gesture Studio
+      </button>
+      <button id="btn-popup-test" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+        Playground
+      </button>
+    </footer>
+  </div>
+
+  <script src="../core/config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
+

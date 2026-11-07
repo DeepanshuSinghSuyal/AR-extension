@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AeroTouch Background Tracker</title>
+</head>
+<body>
+  <video id="tracker-video" playsinline muted autoplay style="display: none;"></video>
+  <canvas id="tracker-canvas" width="640" height="480" style="display: none;"></canvas>
+
+  <script src="../../lib/mediapipe/camera_utils.js"></script>
+  <script src="../../lib/mediapipe/hands.js"></script>
+  <script src="../../lib/smooth_filter.js"></script>
+  <script src="offscreen.js"></script>
+</body>
+</html>
+

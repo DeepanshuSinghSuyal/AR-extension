@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AeroTouch Live Companion</title>
+  <link rel="stylesheet" href="tracker.css">
+</head>
+<body>
+  <div class="tracker-wrapper">
+    <!-- Live Video Feed -->
+    <video id="tracker-video" autoplay playsinline muted></video>
+    <!-- Tracking Canvas Overlay -->
+    <canvas id="tracker-canvas"></canvas>
+
+    <!-- Top HUD -->
+    <div class="hud-header">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <span id="label-status">AeroTouch Active</span>
+      </div>
+      <div class="gesture-pill" id="label-gesture">
+        Show Hand
+      </div>
+    </div>
+
+    <!-- Bottom HUD -->
+    <div class="hud-footer">
+      <span class="hint-pill">16:9 Screen Sync</span>
+      <div style="display: flex; gap: 6px;">
+        <button id="btn-settings" class="btn-ctrl" title="Open Settings">Settings</button>
+        <button id="btn-minimize" class="btn-ctrl" title="Minimize Window">Minimize</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../lib/mediapipe/camera_utils.js"></script>
+  <script src="../../lib/mediapipe/hands.js"></script>
+  <script src="../../lib/smooth_filter.js"></script>
+  <script src="tracker.js"></script>
+</body>
+</html>
+
