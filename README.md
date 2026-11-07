@@ -16,7 +16,7 @@
 
 ## Overview
 
-**AeroTouch** is a high-precision, cross-browser extension (Chrome, Edge, Brave, Opera) that turns your webcam into a touch-free, vision-based browser controller. 
+**AeroTouch** is a high-precision, cross-browser extension (Chrome, Edge, Brave, Opera) that turns your webcam into a touch-free, vision-based browser controller.
 
 Using on-device machine learning with **MediaPipe Hands** and **1-Euro Filter** jitter dampening, AeroTouch lets you point your index finger to glide an artificial digital cursor across any webpage, tap your fingers for genuine mouse clicks, and air-scroll long feeds like YouTube and GitHub effortlessly.
 
@@ -26,15 +26,15 @@ Your real physical mouse remains **100% untouched and functional** at all times.
 
 ## 🖐️ Gesture Control Matrix
 
-| Action | Biomechanical Gesture | Visual & Physical Feedback |
-| :--- | :--- | :--- |
-| **Move Cursor** | **Point Index Finger** | Dual-layer obsidian & titanium reticle glides with hardware-accelerated 60 FPS lerp across the 16:9 screen |
-| **Primary Left Click** | **Touch Middle Finger & Thumb** | Instant 0-latency click with tactile scale contraction (0.85) + clean white expanding shockwave ripple + subtle acoustic click |
-| **Double Click** | **Double Tap Middle Finger & Thumb** | Rapid double tap within 350ms dispatches double click + dual shockwave ripple |
-| **Right Click** | **Touch Ring Finger & Thumb** | Dispatches `contextmenu` + summons functional luxury obsidian context menu (*Open in New Tab*, *Copy Link*, *Back*, *Reload*) |
-| **Air-Scroll** | **Pinch Index Finger & Thumb** | Continuous vertical scrolling following hand movement, with frosted glass HUD pill and directional chevrons |
+| Action                 | Biomechanical Gesture                | Visual & Physical Feedback                                                                                                     |
+| :--------------------- | :----------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| **Move Cursor**        | **Point Index Finger**               | Dual-layer obsidian & titanium reticle glides with hardware-accelerated 60 FPS lerp across the 16:9 screen                     |
+| **Primary Left Click** | **Touch Middle Finger & Thumb**      | Instant 0-latency click with tactile scale contraction (0.85) + clean white expanding shockwave ripple + subtle acoustic click |
+| **Double Click**       | **Double Tap Middle Finger & Thumb** | Rapid double tap within 350ms dispatches double click + dual shockwave ripple                                                  |
+| **Right Click**        | **Touch Ring Finger & Thumb**        | Dispatches `contextmenu` + summons functional luxury obsidian context menu (_Open in New Tab_, _Copy Link_, _Back_, _Reload_)  |
+| **Air-Scroll**         | **Pinch Index Finger & Thumb**       | Continuous vertical scrolling following hand movement, with frosted glass HUD pill and directional chevrons                    |
 
-> **Ergonomic Design**: Separating **Air-Scroll** to the *Index + Thumb* and **Left Click** to the *Middle + Thumb* completely prevents accidental clicks while scrolling through documents or video feeds.
+> **Ergonomic Design**: Separating **Air-Scroll** to the _Index + Thumb_ and **Left Click** to the _Middle + Thumb_ completely prevents accidental clicks while scrolling through documents or video feeds.
 
 ---
 
@@ -84,7 +84,7 @@ Your real physical mouse remains **100% untouched and functional** at all times.
 
 ## ⚙️ Settings & Calibration
 
-Right-click the AeroTouch toolbar icon and select **AeroTouch Settings** (or click the *Settings* button in the companion window footer) to access the dedicated options tab:
+Right-click the AeroTouch toolbar icon and select **AeroTouch Settings** (or click the _Settings_ button in the companion window footer) to access the dedicated options tab:
 
 - **Webcam Device Selection**: Choose between internal laptop webcams or external USB cameras.
 - **Edge Reach Calibration**: Adjust the 16:9 mapping margin (5% - 22%) to reach screen corners comfortably.
